@@ -7,7 +7,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         url: "https://rpc-evm-testnet.venidium.io/",
-        blockNumber: 2868491
+        // blockNumber: 2868491
       }
     }
   }
