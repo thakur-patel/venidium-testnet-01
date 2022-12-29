@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { ethers } from "ethers";
 import "dotenv/config"
-import "@nomiclabs/hardhat-ethers";
-import "@nomicfoundation/hardhat-network-helpers";
+// import "@nomiclabs/hardhat-ethers"; This plugins adds an ethers object to the Hardhat Runtime Environment. We already have one
+// import "@nomicfoundation/hardhat-network-helpers";
 
 describe("Transaction WITHOUT using private keys on Venidium Testnet", function () {
   it("Transaction whose private key I DON'T have access to is recorded", async function () {
