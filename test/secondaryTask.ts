@@ -7,34 +7,7 @@ import "dotenv/config"
 
 describe("Transaction WITHOUT using private keys on Venidium Testnet", function () {
   it("Transaction whose private key I DON'T have access to is recorded", async function () {
-    // Add the Ethers provider logic here:
-    // Define network configurations
-    const providerRPC = {
-      venidiumfork: {
-        name: 'venidiumfork',
-        rpc: 'http://localhost:8545/', 
-        chainId: 31337, 
-      },
-    };
-    // Create ethers provider
-    const provider = new ethers.providers.StaticJsonRpcProvider(
-      providerRPC.venidiumfork.rpc, 
-      {
-        chainId: providerRPC.venidiumfork.chainId,
-        name: providerRPC.venidiumfork.name,
-      }
-    );
 
-    // // Creating account variables
-    // const account_from = {
-    //   privateKey1: process.env.PRIVATE_KEY_1, // private key of Account 1
-    //   privateKey2: process.env.PRIVATE_KEY_2, // private key of Account 2
-    //   privateKey3: process.env.PRIVATE_KEY_3, // private key of Account 3
-    // };
-    
-    // const this.user3 = new ethers.Wallet(account_from.privateKey3, provider);
-    // const addressTo = this.signers[2].address; 
-    
     this.signers = await ethers.getSigners()
     this.user1 = this.signers[0];
     this.user2 = this.signers[1];
@@ -48,11 +21,11 @@ describe("Transaction WITHOUT using private keys on Venidium Testnet", function 
 
     // impersonating an account
     await helpers.impersonateAccount(impersonatedAccount);
-    const impersonatedSigner = await provider.getSigner(impersonatedAccount);
-    console.log("\nimpersonatedSigner: \n", impersonatedSigner);
+    const impersonatedSigner = await ethers.provider.getSigner(impersonatedAccount);
+    // console.log("\nimpersonatedSigner: \n", impersonatedSigner);
 
-    console.log("\nBalance of Impersonated Account BEFORE transaction = ", await (await provider.getBalance(impersonatedAccount)).toString());
-    console.log("\nBalance of account to be credited BEFORE transaction = ", await (await provider.getBalance(addressTo)).toString());
+    console.log("\nBalance of Impersonated Account BEFORE transaction = ", await (await ethers.provider.getBalance(impersonatedAccount)).toString());
+    console.log("\nBalance of account to be credited BEFORE transaction = ", await (await ethers.provider.getBalance(addressTo)).toString());
 
     // Sending the transaction
     const tx = {
@@ -61,13 +34,13 @@ describe("Transaction WITHOUT using private keys on Venidium Testnet", function 
     };
     await impersonatedSigner.sendTransaction(tx);
 
-    console.log("\nBalance of Impersonated Account AFTER transaction = ", await (await provider.getBalance(impersonatedAccount)).toString());
-    console.log("\nBalance of account to be credited AFTER transaction = ", await (await provider.getBalance(addressTo)).toString());
+    console.log("\nBalance of Impersonated Account AFTER transaction = ", await (await ethers.provider.getBalance(impersonatedAccount)).toString());
+    console.log("\nBalance of account to be credited AFTER transaction = ", await (await ethers.provider.getBalance(addressTo)).toString());
     
 
-    // // Checking the Test Case
-    // await expect(await provider.getBalance(this.user3.address)).to.equal(
-    //   ethers.utils.parseEther('10001')
-    // )
+    // Checking the Test Case
+    await expect(await ethers.provider.getBalance(this.user3.address)).to.equal(
+      ethers.utils.parseEther('10001')
+    )
     });
 });
