@@ -12,20 +12,20 @@ const account_from = {
 
 import {HardhatNetworkAccountsUserConfig} from "hardhat/types/config";
 
-const accounts: HardhatNetworkAccountsUserConfig = [
-  {
-    privateKey: account_from.privateKey1!,
-    balance: ethers.utils.parseEther('10000').toString()
-  }, 
-  {
-    privateKey: account_from.privateKey2!,
-    balance: ethers.utils.parseEther('10000').toString()
-  }, 
-  {
-    privateKey: account_from.privateKey3!,
-    balance: ethers.utils.parseEther('10000').toString()
-  }
-]
+// const accounts: HardhatNetworkAccountsUserConfig = [
+//   {
+//     privateKey: account_from.privateKey1!,
+//     balance: ethers.utils.parseEther('10000').toString()
+//   }, 
+//   {
+//     privateKey: account_from.privateKey2!,
+//     balance: ethers.utils.parseEther('10000').toString()
+//   }, 
+//   {
+//     privateKey: account_from.privateKey3!,
+//     balance: ethers.utils.parseEther('10000').toString()
+//   }
+// ]
 
 const config: HardhatUserConfig = {
   solidity: "0.8.17",
@@ -35,7 +35,7 @@ const config: HardhatUserConfig = {
         url: "https://rpc-evm-testnet.venidium.io/",
         // blockNumber: 2868491
       },
-      accounts
+      // accounts
     }
   }
 };

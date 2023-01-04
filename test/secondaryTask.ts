@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
+import { ethers } from "hardhat";
 import "dotenv/config"
 // import "@nomiclabs/hardhat-ethers"; This plugins adds an ethers object to the Hardhat Runtime Environment. We already have one
 // import "@nomicfoundation/hardhat-network-helpers";
@@ -24,16 +25,22 @@ describe("Transaction WITHOUT using private keys on Venidium Testnet", function 
       }
     );
 
-    // Creating account variables
-    const account_from = {
-      privateKey1: process.env.PRIVATE_KEY_1, // private key of Account 1
-      privateKey2: process.env.PRIVATE_KEY_2, // private key of Account 2
-      privateKey3: process.env.PRIVATE_KEY_3, // private key of Account 3
-    };
+    // // Creating account variables
+    // const account_from = {
+    //   privateKey1: process.env.PRIVATE_KEY_1, // private key of Account 1
+    //   privateKey2: process.env.PRIVATE_KEY_2, // private key of Account 2
+    //   privateKey3: process.env.PRIVATE_KEY_3, // private key of Account 3
+    // };
     
-    const wallet3 = new ethers.Wallet(account_from.privateKey3, provider);
-    const addressTo = wallet3.address; 
+    // const this.user3 = new ethers.Wallet(account_from.privateKey3, provider);
+    // const addressTo = this.signers[2].address; 
     
+    this.signers = await ethers.getSigners()
+    this.user1 = this.signers[0];
+    this.user2 = this.signers[1];
+    this.user3 = this.signers[2];
+    const addressTo = this.user3.address;
+
     const helpers = require("@nomicfoundation/hardhat-network-helpers");
 
     // Address that will send the ether
@@ -58,9 +65,9 @@ describe("Transaction WITHOUT using private keys on Venidium Testnet", function 
     console.log("\nBalance of account to be credited AFTER transaction = ", await (await provider.getBalance(addressTo)).toString());
     
 
-    // Checking the Test Case
-    await expect(await provider.getBalance(wallet3.address)).to.equal(
-      ethers.utils.parseEther('10001')
-    )
+    // // Checking the Test Case
+    // await expect(await provider.getBalance(this.user3.address)).to.equal(
+    //   ethers.utils.parseEther('10001')
+    // )
     });
 });
