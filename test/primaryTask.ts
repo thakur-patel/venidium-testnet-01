@@ -8,6 +8,7 @@ import "dotenv/config"
 describe("Transaction using private keys on Venidium Testnet", function () {
   it("Transaction whose private key I have access to is recorded", async function () {
     
+    // Gets first two accounts set in hardhat.config.ts
     const [user1, user2] = await ethers.getSigners();
 
     // Account address of Account 2
