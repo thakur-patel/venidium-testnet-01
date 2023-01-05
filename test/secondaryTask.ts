@@ -12,12 +12,13 @@ describe("Transaction WITHOUT using private keys on Venidium Testnet", function 
     this.user1 = this.signers[0];
     this.user2 = this.signers[1];
     this.user3 = this.signers[2];
+    this.user4 = this.signers[3];
     const addressTo = this.user3.address;
 
     const helpers = require("@nomicfoundation/hardhat-network-helpers");
 
     // Address that will send the ether
-    const impersonatedAccount = "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    const impersonatedAccount = this.user4.address
 
     // impersonating an account
     await helpers.impersonateAccount(impersonatedAccount);
