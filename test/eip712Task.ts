@@ -1,131 +1,138 @@
-// import { expect } from "chai";
-// import { ethers } from "hardhat";
-// import "dotenv/config"
-// const hre = require("hardhat");
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import "dotenv/config"
+// import { AbiCoder } from "ethers/lib/utils";
+const hre = require("hardhat");
+import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 
-// import "@openzeppelin/contracts"
 
-// const fromWei = ethers.utils.formatEther;
-// const toWei = ethers.utils.parseEther;
+const fromWei = ethers.utils.formatEther;
+const toWei = ethers.utils.parseEther;
 
-// describe("EIP712 Testing", function () {
-//   it("Signing Messages", async function () {
+describe("EIP712 Testing", function () {
+  it("Signing Messages", async function () {
     
-//     const EDOToken = await hre.ethers.getContractFactory("EDOToken");
-//     console.log('Deploying EDOToken...');
-//     const token = await EDOToken.deploy();
+    const EDOToken = await hre.ethers.getContractFactory("EDOToken");
+    console.log('Deploying EDOToken...');
+    const token = await EDOToken.deploy();
 
-//     await token.deployed();
-//     console.log("EDOToken deployed to:", token.address);
+    await token.deployed();
+    console.log("EDOToken deployed to:", token.address);
 
-//     // Gets first two accounts set in hardhat.config.ts
-//     const [user1, user2] = await ethers.getSigners();
-//     console.log(fromWei(await token.balanceOf(user1.address)));
-//     console.log(fromWei(await token.balanceOf(user2.address)));
+    // Gets first two accounts set in hardhat.config.ts
+    const [user1, user2, user3] = await ethers.getSigners();
+    console.log("Balance of Account 1: ", fromWei(await token.balanceOf(user1.address)));
+    console.log("Balance of Account 2: ", fromWei(await token.balanceOf(user2.address)));
+    console.log("Balance of Account 3: ", fromWei(await token.balanceOf(user3.address)));
 
-//     // minting to user1 
-//     await token.mint(user1.address, 100);
-//     console.log(fromWei(await token.balanceOf(user1.address)));
+    // // minting to user1 
+    // await token.mint(user1.address, 100);
+    // console.log(fromWei(await token.balanceOf(user1.address)));
     
+    const Verifier = await hre.ethers.getContractFactory("Verifier");
+    console.log('Deploying Verifier...');
+    const verifier = await Verifier.deploy();
+
+    await verifier.deployed();
+    console.log("Verifier deployed to:", verifier.address);
     
-//     // const DOMAIN_NAME = "ex-ex-ex";
-//     // const DOMAIN_VERSION = "0.0.1";
+    const DOMAIN_NAME = "Sign and Mint";
+    const DOMAIN_VERSION = "0.0.1";
+    const chainId = await ethers.provider.getNetwork(); // this returns an object
+    // console.log(chainId.chainId);    
+    const contractAddress = verifier.address;
 
-
-//     // function getDomain(chainId, contractAddress) {
-//     //   return {
-//     //     name: DOMAIN_NAME,
-//     //     version: DOMAIN_VERSION,
-//     //     chainId: chainId,
-//     //     verifyingContract: contractAddress
-//     //   }
-//     // }
-
-//     // const types = {
-//     //   SignedMint: [{
-//     //       name: "x",
-//     //       type: "address"
-//     //     },
-//     //     {
-//     //       name: "y",
-//     //       type: "uint256"
-//     //     },
-//     //     {
-//     //       name: "z",
-//     //       type: "uint256"
-//     //     },
-//     //   ]
-//     // };
-
-//     // async function signMessage(_x, _y, _z) {
-//     //   message = {
-//     //     x: _x,
-//     //     y: _y,
-//     //     z: _z
-//     //   }
-
-//     //   const chainId = await web3.eth.getChainId();
-//     //   xyzcontract = await ethers.getContractFactory("XYZContract");
-//     //   domain = getDomain(chainId, xyzcontract.address);
-//     //   signature = await signer._signTypedData(domain, types, message);
-//     //   return signature
-//     // }
-
-//     // function pack(x, y, z, signature) {
-//     //   return web3.eth.abi.encodeParameters(
-//     //     ['address', 'uint256', 'uint256', 'bytes memory'],
-//     //     [x, y, z, signature]
-//     //   );
-//     // }
-
-//     // async function packAndSign(x, y, z) {
-//     //   let signature = await signMessage(x, y, z);
-//     //   let data = pack(x, y, z, signature);
-//     //   return {
-//     //     data,
-//     //     signature
-//     //   }
-//     // }
-
-//     // // Gets first two accounts set in hardhat.config.ts
-//     // const [user1, user2] = await ethers.getSigners();
-
-//     // // Account address of Account 2
-//     // const addressTo = user2.address; 
-
-//     // // 4. Create send function
-//     // // Sending a transaction from Account 1 to Account 2
-//     // const send = async () => {
-//     //   console.log(`Attempting to send transaction from ${user1.address} to ${addressTo}`);
-
-//     //   // 5. Create tx object
-//     //   const tx = {
-//     //     to: addressTo,
-//     //     value: ethers.utils.parseEther('1'),
-//     //   };
-//     //   // // console.log(tx);
-
-//     //   // 6. Sign and send tx - wait for receipt
-//     //   const createReceipt = await user1.sendTransaction(tx);      
-//     //   await createReceipt.wait();
-//     //   // console.log(createReceipt);
-//     //   console.log(`\nTransaction successful with hash: ${createReceipt.hash} \n`);
-//     // };
-
-//     // console.log("\nAccount Balance of sending account BEFORE calling send() :-");
-//     // console.log("Address: ", user1.address);
-//     // console.log("Balance: ", await (await ethers.provider.getBalance(user1.address)).toString());
-
-//     // // Call the send function
-//     // console.log("\n");
-//     // await send();
+    const domain = {
+      name: DOMAIN_NAME,
+      version: DOMAIN_VERSION,
+      chainId: chainId.chainId,
+      verifyingContract: contractAddress        
+    }
     
-//     // console.log("\nAccount Balances of sending account AFTER calling send() :-");
-//     // console.log("Balance: ", await (await ethers.provider.getBalance(user1.address)).toString());
+    const types = {
+      SignedMessage: [
+        {
+          name: "nonce",
+          type: "uint256"
+        },
+        {
+          name: "amount",
+          type: "uint256"
+        },
+      ]
+    }
 
-//     // // Checking the Test Case
-//     // await expect(await ethers.provider.getBalance(user2.address)).to.equal(
-//     //   ethers.utils.parseEther('10001')
-//     // )
-//   });
-// });
+    async function signMessage(_nonce, _amount) {
+      let message = {
+        nonce: _nonce,
+        amount: _amount
+      }
+      if (_nonce == 0) return await user1._signTypedData(domain, types, message);
+      if (_nonce == 1) return await user2._signTypedData(domain, types, message);
+      if (_nonce == 2) return await user3._signTypedData(domain, types, message);
+    }
+
+    // let message = {
+    //   nonce: 0,
+    //   amount: 100
+    // }
+
+    // const signature = await user1._signTypedData(domain, types, message);
+    // console.log(signature);
+
+    const abicoder = new ethers.utils.AbiCoder();
+
+    function pack(nonce, amount, signature) {
+      return abicoder.encode(
+        ['uint256', 'uint256', 'bytes memory'],
+        [nonce, amount, signature]
+      );
+    }
+
+    async function packAndSign(nonce, amount) {
+      let signature = await signMessage(nonce, amount);
+      let data = pack(nonce, amount, signature);
+      return {
+        data,
+        signature
+      }
+    }
+
+    let struct1 = await packAndSign(0, 100);
+    // console.log(struct1);
+    let verifiedAddress1 = await verifier.verify(struct1.data, struct1.signature)
+    // console.log(user1);
+    console.log(verifiedAddress1);
+    console.log(user1.address);
+
+    if (verifiedAddress1 == user1.address) {
+      // minting to user1 
+      await token.mint(user1.address, 100);
+      console.log("Balance of Account 1: ", fromWei(await token.balanceOf(user1.address)));
+    }
+
+
+    let struct2 = await packAndSign(1, 150);
+    let verifiedAddress2 = await verifier.connect(user2).verify(struct2.data, struct2.signature)
+    console.log(verifiedAddress2);
+    console.log(user2.address);
+
+    if (verifiedAddress2 == user2.address) {
+      // minting to user2
+      await token.mint(user2.address, 150);
+      console.log("Balance of Account 2: ", fromWei(await token.balanceOf(user2.address)));
+    }
+
+
+    let struct3 = await packAndSign(2, 500);
+    let verifiedAddress3 = await verifier.connect(user3).verify(struct3.data, struct3.signature)
+    console.log(verifiedAddress3);
+    console.log(user3.address);
+
+    if (verifiedAddress3 == user3.address) {
+      // minting to user3
+      await token.mint(user3.address, 500);
+      console.log("Balance of Account 3: ", fromWei(await token.balanceOf(user3.address)));
+    }
+  });
+});
