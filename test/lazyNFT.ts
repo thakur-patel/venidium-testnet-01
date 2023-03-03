@@ -21,7 +21,7 @@
 
 //       const SIGNING_DOMAIN_NAME = "Voucher-Domain"
 //       const SIGNING_DOMAIN_VERSION = "1"
-//       const chainId = 5777
+//       const chainId = await ethers.provider.getNetwork(); // this returns an object
 //       const contractAddress = lazynft.address 
 //       // const signer = new ethers.Wallet("503f38a9c967ed597e47fe25643985f032b072db8075426a92110f82df48dfcb") // private key that I use for address 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4
   
@@ -29,11 +29,17 @@
 //         name: SIGNING_DOMAIN_NAME,
 //         version: SIGNING_DOMAIN_VERSION,
 //         verifyingContract: contractAddress,
-//         chainId
+//         chainId: chainId.chainId
 //       }
   
-//       async function createVoucher(tokenId: any, price: any, uri: any, buyer: any) {
-//         const voucher = { tokenId, price, uri, buyer }
+//       async function createVoucher(_tokenId: any, _price: any, _uri: any, _buyer: any) {
+//         const voucher = { 
+//             tokenId: _tokenId, 
+//             price: _price, 
+//             uri: _uri, 
+//             buyer: _buyer 
+//         }
+
 //         const types = {
 //           LazyNFTVoucher: [
 //             {name: "tokenId", type: "uint256"},
