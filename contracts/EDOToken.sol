@@ -24,7 +24,7 @@ contract EDOToken is ERC20, EIP712, Ownable {
 
     bytes32 public constant VERIFY_PLAIN_TYPEHASH = keccak256("SignedMessage(uint256 nonce,uint256 amount)");
 
-    mapping (bytes => bool) private sigStatusMap;
+    mapping (bytes32 => bool) private sigStatusMap;
     // true if signature is used. false if signature isn't used.
 
     function mint(address to, uint256 amount) public {
@@ -41,7 +41,8 @@ contract EDOToken is ERC20, EIP712, Ownable {
         );
         Sign.signature = signature;
 
-        require(sigStatusMap[Sign.signature] == false, "This signature has been used.");
+        bytes32 sigHash = keccak256(Sign.signature);
+        require(sigStatusMap[sigHash] == false, "This signature has been used.");
         // console.log(Sign.amount);
         // console.log(Sign.nonce);
         // return Sign.signature;
@@ -56,7 +57,7 @@ contract EDOToken is ERC20, EIP712, Ownable {
         require(signer != address(0), "Minter cannot be 0x000...");
         _mint(msg.sender, Sign.amount * (10**18));
 
-        sigStatusMap[Sign.signature] = true;
+        sigStatusMap[sigHash] = true;
         return signer;
     }
 }

@@ -35,6 +35,7 @@ describe("EIP712 Testing", function () {
     const chainId = await ethers.provider.getNetwork(); // this returns an object
     // console.log(chainId.chainId);    
     const contractAddress = token.address;
+    let NONCE = 0;
 
     const domain = {
       name: DOMAIN_NAME,
@@ -63,9 +64,6 @@ describe("EIP712 Testing", function () {
       }
 
       return await owner._signTypedData(domain, types, message);
-      // if (_nonce == 0) return await user1._signTypedData(domain, types, message);
-      // if (_nonce == 1) return await user2._signTypedData(domain, types, message);
-      // if (_nonce == 2) return await user3._signTypedData(domain, types, message);
     }
 
     const abicoder = new ethers.utils.AbiCoder();
@@ -86,13 +84,18 @@ describe("EIP712 Testing", function () {
       }
     }
 
-    let struct1 = await packAndSign(0, 100);
+    async function callMe(amount) {
+      return packAndSign(NONCE++, amount);
+    }
+
+    let struct1 = await callMe(100);
+    // let struct1 = await packAndSign(NONCE++, 100);
     await token.connect(user1).verify(struct1.data, struct1.signature)
 
     console.log("Balance of Account 1: ", fromWei(await token.balanceOf(user1.address)));
 
-
-    let struct2 = await packAndSign(1, 150);
+    let struct2 = await callMe(150);
+    // let struct2 = await packAndSign(NONCE++, 150);
     await token.connect(user2).verify(struct2.data, struct2.signature)
 
     console.log("Balance of Account 2: ", fromWei(await token.balanceOf(user2.address)));
@@ -101,7 +104,8 @@ describe("EIP712 Testing", function () {
     await expect(token.connect(user2).verify(struct2.data, struct2.signature))
     .to.be.revertedWith('This signature has been used.');
 
-    let struct3 = await packAndSign(2, 500);
+    let struct3 = await callMe(500);
+    // let struct3 = await packAndSign(NONCE++, 500);
     await token.connect(user3).verify(struct3.data, struct3.signature)
 
     console.log("Balance of Account 3: ", fromWei(await token.balanceOf(user3.address)));
