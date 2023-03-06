@@ -12,15 +12,20 @@ const toWei = ethers.utils.parseEther;
 describe("EIP712 Testing", function () {
   it("Signing Messages", async function () {
     
+    const [owner, user1, user2, user3] = await ethers.getSigners();
+
     const EDOToken = await hre.ethers.getContractFactory("EDOToken");
     console.log('Deploying EDOToken...');
     const token = await EDOToken.deploy();
 
     await token.deployed();
     console.log("EDOToken deployed to:", token.address);
+    
+    const contractOwner = await token.owner();
+    console.log("Contract Owner: ", contractOwner);
+    // const owner = jsonRpcProvider.getSigner( [ addressOrIndex ] )
 
     // Gets first two accounts set in hardhat.config.ts
-    const [user1, user2, user3] = await ethers.getSigners();
     console.log("Balance of Account 1: ", fromWei(await token.balanceOf(user1.address)));
     console.log("Balance of Account 2: ", fromWei(await token.balanceOf(user2.address)));
     console.log("Balance of Account 3: ", fromWei(await token.balanceOf(user3.address)));
@@ -67,9 +72,11 @@ describe("EIP712 Testing", function () {
         nonce: _nonce,
         amount: _amount
       }
-      if (_nonce == 0) return await user1._signTypedData(domain, types, message);
-      if (_nonce == 1) return await user2._signTypedData(domain, types, message);
-      if (_nonce == 2) return await user3._signTypedData(domain, types, message);
+
+      return await owner._signTypedData(domain, types, message);
+      // if (_nonce == 0) return await user1._signTypedData(domain, types, message);
+      // if (_nonce == 1) return await user2._signTypedData(domain, types, message);
+      // if (_nonce == 2) return await user3._signTypedData(domain, types, message);
     }
 
     // let message = {
@@ -100,7 +107,7 @@ describe("EIP712 Testing", function () {
 
     let struct1 = await packAndSign(0, 100);
     // console.log(struct1);
-    let verifiedAddress1 = await token.verify(struct1.data, struct1.signature)
+    let verifiedAddress1 = await token.connect(user1).verify(struct1.data, struct1.signature)
     // console.log(user1);
     // console.log(verifiedAddress1);
     // console.log(user1.address);

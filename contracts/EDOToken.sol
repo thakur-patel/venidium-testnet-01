@@ -5,8 +5,9 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract EDOToken is ERC20, EIP712 {
+contract EDOToken is ERC20, EIP712, Ownable {
 
     // uint256 constant initialSupply = 1000000 * (10**18);
 
@@ -46,9 +47,9 @@ contract EDOToken is ERC20, EIP712 {
         )));
         address signer = ECDSA.recover(digest, Sign.signature);
         
-        require(signer == msg.sender, "You aren't allowed to mint this.");
+        require(signer == owner(), "You aren't allowed to mint this.");
         require(signer != address(0), "Minter cannot be 0x000...");
-        _mint(signer, Sign.amount * (10**18));
+        _mint(msg.sender, Sign.amount * (10**18));
 
         return signer;
     }
