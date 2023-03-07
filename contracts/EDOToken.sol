@@ -27,7 +27,7 @@ contract EDOToken is ERC20, EIP712, Ownable {
     mapping (bytes32 => bool) private sigStatusMap;
     // true if signature is used. false if signature isn't used.
 
-    function mint(address to, uint256 amount) public {
+    function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount * (10**18));
     }
 
