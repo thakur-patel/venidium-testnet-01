@@ -3,6 +3,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import "@nomiclabs/hardhat-etherscan";
 import "dotenv/config"
 import { ethers } from "ethers";
+import '@openzeppelin/hardhat-upgrades';
 
 const account_from = {
   privateKey1: process.env.PRIVATE_KEY_1, // private key of Account 1
