@@ -17,7 +17,7 @@ contract EDOUpg1V3 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
 
     uint private upgvar1;
 
-    function set_upgvar1(uint256 _upgvar1) public onlyOwner {
+    function set_upgvar1(uint256 _upgvar1) public {
         upgvar1 = _upgvar1;
     }
 
@@ -46,6 +46,17 @@ contract EDOUpg1V3 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
 
     function get_upgvar2() public view returns (uint256) {
         return upgvar2;
+    }
+
+    // inserting new variable in upgradeable contract
+    uint256 private upgvar3;
+
+    function set_upgvar3(uint256 _upgvar3) public onlyOwner {
+        upgvar3 = _upgvar3;
+    }
+
+    function get_upgvar3() public view returns (uint256) {
+        return upgvar3;
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
