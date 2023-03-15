@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 
-contract EDOUpg1 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
+contract EDOUpg1V3 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
 
     // uint256 constant initialSupply = 1000000 * (10**18);
     function initialize(string memory name_, string memory symbol_) initializer public {
@@ -17,7 +17,7 @@ contract EDOUpg1 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
 
     uint private upgvar1;
 
-    function set_upgvar1(uint256 _upgvar1) public {
+    function set_upgvar1(uint256 _upgvar1) public onlyOwner {
         upgvar1 = _upgvar1;
     }
 
@@ -36,6 +36,17 @@ contract EDOUpg1 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
 
     mapping (bytes32 => bool) private sigStatusMap;
     // true if signature is used. false if signature isn't used.
+
+    // inserting new variable in upgradeable contract
+    uint private upgvar2;
+
+    function set_upgvar2(uint256 _upgvar2) public onlyOwner {
+        upgvar2 = _upgvar2;
+    }
+
+    function get_upgvar2() public view returns (uint256) {
+        return upgvar2;
+    }
 
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount * (10**18));
