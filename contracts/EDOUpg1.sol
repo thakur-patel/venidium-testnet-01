@@ -12,7 +12,6 @@ contract EDOUpg1 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
     // uint256 constant initialSupply = 1000000 * (10**18);
     function initialize(string memory name_, string memory symbol_) initializer public {
         __ERC20_init(name_, symbol_);
-        __Ownable_init();
     }
 
     uint private upgvar1;

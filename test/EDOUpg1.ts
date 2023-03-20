@@ -32,7 +32,7 @@ describe("Upgradeable Contracts Testing", function () {
     
         // Upgrading to V3
         const EDOUpg1V3 = await ethers.getContractFactory("EDOUpg1V3");
-        const upgradedV3 = await upgrades.upgradeProxy(instance.address, EDOUpg1V3, { kind: 'transparent'});  
+        const upgradedV3 = await upgrades.upgradeProxy(instance.address, EDOUpg1V3, { call: { fn: "initialize", args:["EDO Token", "EDO"]}, kind: 'transparent'});  
         // console.log(upgradedV3.address);
         // const contractOwnerV3 = await instance.owner();
         // console.log(contractOwnerV3);
