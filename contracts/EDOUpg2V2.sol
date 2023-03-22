@@ -7,9 +7,11 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-// import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
+// import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract EDOUpg2 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable, UUPSUpgradeable {
+contract EDOUpg2V2 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable, UUPSUpgradeable {
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
     // uint256 constant initialSupply = 1000000 * (10**18);
     function initialize(string memory name_, string memory symbol_) initializer public {
@@ -17,7 +19,7 @@ contract EDOUpg2 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable, UUP
         __Ownable_init();
         __UUPSUpgradeable_init();
 
-        // __AccessControlEnumerable_init();
+        // __AccessControl_init();
         // _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         // _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         // _grantRole(MINTER_ROLE, msg.sender);
@@ -57,6 +59,17 @@ contract EDOUpg2 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable, UUP
 
     function get_upgvar2() public view returns (uint256) {
         return upgvar2;
+    }
+
+     // inserting new variable in upgradeable contract
+    uint256 private upgvar3;
+
+    function set_upgvar3(uint256 _upgvar3) public onlyOwner {
+        upgvar3 = _upgvar3;
+    }
+
+    function get_upgvar3() public view returns (uint256) {
+        return upgvar3;
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
