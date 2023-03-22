@@ -9,7 +9,11 @@ import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable
 
 contract EDOUpg1 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
 
-    // uint256 constant initialSupply = 1000000 * (10**18);
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+    
     function initialize(string memory name_, string memory symbol_) initializer public {
         __ERC20_init(name_, symbol_);
     }
