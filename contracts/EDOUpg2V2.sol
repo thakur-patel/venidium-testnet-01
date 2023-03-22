@@ -10,10 +10,15 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 // import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 contract EDOUpg2V2 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable, UUPSUpgradeable {
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
-
+    // bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    // bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
     // uint256 constant initialSupply = 1000000 * (10**18);
+    
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+
     function initialize(string memory name_, string memory symbol_) initializer public {
         __ERC20_init(name_, symbol_);
         __Ownable_init();
@@ -26,7 +31,7 @@ contract EDOUpg2V2 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable, U
         // _grantRole(UPGRADER_ROLE, msg.sender);
     }
 
-    function _authorizeUpgrade(address newImplementation) internal view onlyOwner override {}
+    function _authorizeUpgrade(address newImplementation) internal onlyOwner override {}
 
     uint private upgvar1;
 
