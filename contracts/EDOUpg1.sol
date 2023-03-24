@@ -13,18 +13,19 @@ contract EDOUpg1 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
     constructor() {
         _disableInitializers();
     }
-    
-    function initialize(string memory name_, string memory symbol_) initializer public {
+
+    function initialize(string memory name_, string memory symbol_) virtual initializer public {
         __ERC20_init(name_, symbol_);
+        // __Ownable_init();
     }
 
     uint private upgvar1;
 
-    function set_upgvar1(uint256 _upgvar1) public {
+    function set_upgvar1(uint256 _upgvar1) virtual public {
         upgvar1 = _upgvar1;
     }
 
-    function get_upgvar1() public view returns (uint256) {
+    function get_upgvar1() virtual public view returns (uint256) {
         return upgvar1;
     }
 
@@ -40,11 +41,11 @@ contract EDOUpg1 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
     mapping (bytes32 => bool) private sigStatusMap;
     // true if signature is used. false if signature isn't used.
 
-    function mint(address to, uint256 amount) public onlyOwner {
+    function mint(address to, uint256 amount) virtual public onlyOwner {
         _mint(to, amount * (10**18));
     }
 
-    function verify(bytes memory data, bytes memory signature) public returns (address) {
+    function verify(bytes memory data, bytes memory signature) virtual public returns (address) {
         
         SignedMessage memory Sign;
 
