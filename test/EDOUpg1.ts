@@ -15,10 +15,12 @@ describe("Upgradeable Contracts Testing", function () {
         const EDOUpg1 = await ethers.getContractFactory("EDOUpg1");
         const instance = await upgrades.deployProxy(EDOUpg1, ["EDO Token", "EDO"], { initializer: 'initialize', kind: 'transparent'});
         await instance.deployed();
-        const contractOwnerV1 = await instance.owner();
+        const contractOwnerV1 = await instance.connect(user1).owner();
         console.log("Values initialized in V1 :-");
         console.log("Proxy Contract Address: ", instance.address);
-        console.log("Owner of deployed Proxy contract: ", contractOwnerV1);        
+        console.log("Owner of deployed Proxy contract: ", contractOwnerV1);   
+        console.log("Token Ticker: ", await instance.symbol());
+             
         await instance.set_upgvar1(7);
         console.log("upgvar1: ", await instance.get_upgvar1());
 
@@ -77,7 +79,7 @@ describe("Upgradeable Contracts Testing", function () {
             } 
         );  
         
-        // CALLING initialize() IN upgradeProxy() OPTS
+        // // CALLING initialize() IN upgradeProxy() OPTS
         // const upgradedV3 = await upgrades.upgradeProxy(
         //     instance.address, 
         //     EDOUpg1V3, 
@@ -129,19 +131,19 @@ describe("Upgradeable Contracts Testing", function () {
         console.log("upgvar3: ", await upgradedV3.get_upgvar3());  
         console.log("upgvar4: ", await upgradedV3.get_upgvar4());  
 
-        // console.log("Values updated in V3 :-");
+        console.log("Values updated in V3 :-");
         
-        // await upgradedV3.connect(user1).set_upgvar1(99);
-        // console.log("upgvar1: ", await upgradedV3.get_upgvar1());        
+        await upgradedV3.connect(user1).set_upgvar1(99);
+        console.log("upgvar1: ", await upgradedV3.get_upgvar1());        
 
-        // await upgradedV3.connect(user2).set_upgvar2(10);
-        // console.log("upgvar2: ", await upgradedV3.get_upgvar2());
+        await upgradedV3.connect(user2).set_upgvar2(10);
+        console.log("upgvar2: ", await upgradedV3.get_upgvar2());
 
-        // await upgradedV3.connect(owner).set_upgvar3(101);
-        // console.log("upgvar3: ", await upgradedV3.get_upgvar3());  
+        await upgradedV3.connect(owner).set_upgvar3(101);
+        console.log("upgvar3: ", await upgradedV3.get_upgvar3());  
 
-        // await expect(upgradedV3.connect(user1).set_upgvar3(101)).to.be.revertedWith('Ownable: caller is not the owner'); // set_upgvar2 can only be called by owner
-        // await expect(upgradedV3.connect(user2).set_upgvar3(101)).to.be.revertedWith('Ownable: caller is not the owner'); // set_upgvar3 can only be called by owner
+        await expect(upgradedV3.connect(user1).set_upgvar3(101)).to.be.revertedWith('Ownable: caller is not the owner'); // set_upgvar2 can only be called by owner
+        await expect(upgradedV3.connect(user2).set_upgvar3(101)).to.be.revertedWith('Ownable: caller is not the owner'); // set_upgvar3 can only be called by owner
 
     })
 

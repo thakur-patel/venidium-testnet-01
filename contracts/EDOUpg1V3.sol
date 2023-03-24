@@ -7,10 +7,14 @@ import "./EDOUpg1V2.sol";
 // contract EDOUpg1V3 is ERC20Upgradeable, OwnableUpgradeable, EIP712Upgradeable {
 contract EDOUpg1V3 is EDOUpg1V2 {
 
-    function initialize(string memory name_, string memory symbol_) initializer virtual override public {
-        __ERC20_init(name_, symbol_);
-        __Ownable_init();
-    }
+    // function initialize(string memory name_, string memory symbol_) initializer public {
+    //     // __ERC20_init(name_, symbol_);
+    //     __Ownable_init();
+    // }
+
+    // function initializeV3() initializer virtual public {
+
+    // }
 
     // address private _owner_;
 
